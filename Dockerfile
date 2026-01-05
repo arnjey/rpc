@@ -28,3 +28,4 @@ ENV PYTHONUNBUFFERED=1
 
 # Run the application
 CMD ["python", "vrpc.py", "--always-show"]
+# Force rebuild - fixing SyntaxWarning display in Railway logs
