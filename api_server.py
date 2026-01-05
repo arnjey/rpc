@@ -4,11 +4,16 @@ Receives game status updates from local ValoRPC and displays them on a web dashb
 """
 from flask import Flask, jsonify, request, render_template_string
 import json
+import os
 from datetime import datetime
 from threading import Lock
 
 app = Flask(__name__)
 app.config['JSON_SORT_KEYS'] = False
+
+# Get port from environment (Railway sets this)
+PORT = int(os.environ.get('PORT', 8000))
+HOST = os.environ.get('HOST', '0.0.0.0')
 
 # In-memory status storage (persists while container is running)
 status_lock = Lock()
@@ -322,12 +327,17 @@ def root_post():
     return get_status()
 
 if __name__ == '__main__':
-    # Production: use waitress
+    # Production: use waitress with environment PORT
     try:
         from waitress import serve
-        print("Starting ValoRPC API Server on port 8000...")
-        serve(app, host='0.0.0.0', port=8000)
-    except ImportError:
-        # Fallback: use Flask dev server
-        print("Warning: waitress not available, using Flask dev server")
-        app.run(host='0.0.0.0', port=8000, debug=False)
+        print(f"[ValoRPC API] Starting server on {HOST}:{PORT}")
+        serve(app, host=HOST, port=PORT, _quiet=False)
+    except ImportError as e:
+        print(f"[ValoRPC API] Warning: waitress not available ({e})")
+        print(f"[ValoRPC API] Using Flask development server")
+        app.run(host=HOST, port=PORT, debug=False, threaded=True)
+    except Exception as e:
+        print(f"[ValoRPC API] CRITICAL ERROR: {e}")
+        import traceback
+        traceback.print_exc()
+        exit(1)
