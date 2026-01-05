@@ -8,6 +8,9 @@ logger = logging.getLogger(__name__)
 
 client_id = 1457735765617541262
 
+# Global API client reference (will be set by vrpc.py)
+api_client = None
+
 class Presence:
    def __init__(self) -> None:
       try:
@@ -55,6 +58,24 @@ class Presence:
       status['buttons'] = [{'label': 'Download from GitHub', 'url': 'https://github.com/PenguinDevs/ValoRPC/releases/latest'}]
       self.status = status
       self.__check_changed()
+      
+      # Also send to API server if configured
+      if api_client and api_client.enabled:
+         try:
+            # Extract relevant info from status dict
+            large_text = status.get('large_text', 'Valorant')
+            state = status.get('state', '')
+            details = status.get('details', '')
+            
+            # Determine status: if large_text contains "Valorant" and we have state/details, we're in-game
+            if 'Valorant' in large_text and (state or details):
+               api_client.set_playing(details=details, state=state)
+            elif 'Valorant' in large_text:
+               api_client.set_online()
+            else:
+               api_client.set_offline()
+         except Exception as e:
+            logger.warning(f'Failed to send update to API: {e}')
 
    def __check_changed(self) -> None:
       time_now = time.time()
