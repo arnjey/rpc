@@ -6,6 +6,9 @@
   "deploy": {
     "numReplicas": 1,
     "sleepApplication": false,
-    "restartPolicyMaxRetries": 5
+    "restartPolicyMaxRetries": 5,
+    "healthcheck": {
+      "disabled": true
+    }
   }
 }
