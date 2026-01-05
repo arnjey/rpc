@@ -8,7 +8,12 @@
     "sleepApplication": false,
     "restartPolicyMaxRetries": 5,
     "healthcheck": {
-      "disabled": true
+      "enabled": true,
+      "interval": 30000,
+      "timeout": 10000,
+      "startPeriod": 10000,
+      "successThreshold": 1,
+      "failureThreshold": 3
     }
   }
 }
