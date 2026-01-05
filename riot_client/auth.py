@@ -27,7 +27,7 @@ class Auth:
             'password': self.password
         }
         r = session.put('https://auth.riotgames.com/api/v1/authorization', json=data)
-        pattern = re.compile('access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)')
+        pattern = re.compile(r'access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)')
         data = pattern.findall(r.json()['response']['parameters']['uri'])[0] 
         access_token = data[0]
 
@@ -62,7 +62,7 @@ class Auth:
                 'password': self.password
             }
             r = await session.put('https://auth.riotgames.com/api/v1/authorization', json=data, headers=headers)
-            pattern = re.compile('access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)')
+            pattern = re.compile(r'access_token=((?:[a-zA-Z]|\d|\.|-|_)*).*id_token=((?:[a-zA-Z]|\d|\.|-|_)*).*expires_in=(\d*)')
             responseJson = await r.json()
             data = pattern.findall(responseJson['response']['parameters']['uri'])[0]
                     # data = pattern.findall("https://account.riotgames.com/oauth2/log-in?code=dXcxOmNVNW93V3IzeGIwVU55N0lCUGlXNlEucGdJYmU2SXhqYkRSd05XaTBGQ2hFdw%3D%3D&iss=https%3A%2F%2Fauth.riotgames.com&state=1f516289-fe1c-4a1d-b136-66c72431711d&session_state=f_hKDUt01KM9v4B7X9cOsv1jpVO1vVfJIb964V1CGZw.yle7bc0IAx-FUTdxJv39wQ")[0]
