@@ -1,5 +1,5 @@
 import os
-import regex
+import re
 import requests
 import traceback
 import logging
@@ -21,7 +21,7 @@ class VersioningHandler:
       self.current_tupled_version = self.version_to_tuple(self.current_version)
 
    def version_to_tuple(self, version: str) -> tuple:
-      tupled_version = tuple([int(d) for d in regex.findall('\d+.\d+.\d+' ,version)[0].split('.')])
+      tupled_version = tuple([int(d) for d in re.findall(r'\d+\.\d+\.\d+' ,version)[0].split('.')])
 
       return tupled_version
 

@@ -1,4 +1,4 @@
-import regex
+import re
 import logging
 
 logger = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ class BasePresence():
       
       example_participant = event_data['participants'][0]
       cid = example_participant['cid']
-      match_id = regex.match('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', cid)
+      match_id = re.match(r'[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}', cid)
       match_id = match_id.group(0)
 
       match_key = f'{match_type}_{match_id}'
